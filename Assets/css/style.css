@@ -1,0 +1,12 @@
+
+header {
+    margin-bottom: 3em;
+}
+
+.columns {
+    border: 2px solid blue;
+}
+
+.column {
+    border: 2px solid red;
+}
