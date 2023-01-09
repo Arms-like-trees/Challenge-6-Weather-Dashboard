@@ -1,42 +1,71 @@
+//grab current date
+var now = dayjs().format('MM/DD/YYYY')
+
 // make a API request (for data - weather)
 
 // Fetch API method
+function weatherRequest(city_name) {
 
-let lat = '40.73';
-let lon = '-73.93';
-let APIkey = 'b775e2b9ad92ea05a58543913cd30016';
+    var APIkey = 'b775e2b9ad92ea05a58543913cd30016';
 
-let url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=${APIkey}`;
+    let currentQueryURL = `http://api.openweathermap.org/data/2.5/weather?q=${city_name}&appid=${APIkey}&units=imperial`;
 
-console.log(url);
+    //console.log(url);
 
-// first we grab user input then make GEOCode request
+    // first we grab user input then make GEOCode request
 
-let testingUrl = 'https://jsonplaceholder.typicode.com/albums'
 
-// Makes an Asynchronous Request 
-fetch(testingUrl)      // this call returns a PROMISE 
-    .then(function(response) {
-        // console.log(response);
-        return response.json();   // this converts the incoming data from JSON to a JAvaScript Object
-    })
-    .then(function(data) {
-        console.log("********");
-        console.log(data);
+    // Makes an Asynchronous Request 
+    fetch(currentQueryURL)      // this call returns a PROMISE 
+        .then(function (response) {
+            return response.json();   // this converts the incoming data from JSON to a JAvaScript Object
+        })
+        .then(function (data) {
+            console.log("********");
+            console.log(data);
+            let weatherIcon = `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
+            $('#current-weather').text(`${data.name} (${now})`);
+            $('#current-weather-icon').attr("src", weatherIcon);
+            $('#temperature').text(`Temp: ${data.main.temp}°F`);
+            $('#wind').text(`Wind: ${data.wind.speed} MPH`);
+            $('#humidity').text(`Humidity: ${data.main.humidity} %`);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    //start of the 5 day forecast fetch call
+    let forecastQueryURL = `http://api.openweathermap.org/data/2.5/forecast?q=${city_name}&appid=${APIkey}&units=imperial`;
+    fetch(forecastQueryURL)      // this call returns a PROMISE 
+        .then(function (response) {
+            return response.json();   // this converts the incoming data from JSON to a JAvaScript Object
+        })
+        .then(function (data) {
+            console.log("********");
+            console.log(data);
+            $('#forecast').text('5-Day Forecast:');
 
-        let test = data[0];
-        console.log(test);
+            //Day 1 forecast
+            $('#current-day+1').text(`${data.list[2].dt_text}`);
+            console.log(`${data.list[2].dt_text}`);
+            //need to double check on how to do the image
+            $('#current-icon+1').attr(`${data.list[2].weather[0].icon}`);
+            $('#current-temperature+1').text(`${data.list[2].main.temp}`);
+            $('#current-wind+1').text(`${data.list[2].wind.speed}`);
+            $('#current-humidity+1').text(`${data.list[2].main.humidity}`);
 
-        console.log('I am IN the FETCH Call')
+            //Day 2 forecast
+            $('#current-day+2').text(`${data.list[10].dt_text}`);
+            $('#current-icon+2').text(`${data.list[10].weather[0].icon}`);
+            $('#current-temperature+2').text(`${data.list[10].main.temp}`);
+            $('#current-wind+2').text(`${data.list[10].wind.speed}`);
+            $('#current-humidity+2').text(`${data.list[10].main.humidity}`);
 
-        // here is where make a second API call (if this call depends on DATA from the FIRST API CALL)
-    })
-    .catch(function(error) {
-        console.log(error);
-    });
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+}
 
-    
-console.log("I am after the FETCH call");
 
 var searchedCitiesEl = $('#searched-cities-list');
 var citySearchEl = $('#city-search');
@@ -52,7 +81,7 @@ function handleCitySearch(event) {
         console.log('No city inputted');
         return;
     }
-
+    weatherRequest(cityForm);
     //Adds to searched cities list
 
     searchedCitiesEl.append('<li>' + cityForm + '</li>');
