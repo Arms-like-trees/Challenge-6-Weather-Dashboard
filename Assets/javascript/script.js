@@ -8,7 +8,7 @@ function weatherRequest(city_name) {
 
     var APIkey = 'b775e2b9ad92ea05a58543913cd30016';
 
-    let currentQueryURL = `http://api.openweathermap.org/data/2.5/weather?q=${city_name}&appid=${APIkey}&units=imperial`;
+    let currentQueryURL = `https://api.openweathermap.org/data/2.5/weather?q=${city_name}&appid=${APIkey}&units=imperial`;
 
     //console.log(url);
 
@@ -23,7 +23,7 @@ function weatherRequest(city_name) {
         .then(function (data) {
             console.log("********");
             console.log(data);
-            let weatherIcon = `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
+            let weatherIcon = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
             $('#current-weather').text(`${data.name} (${now})`);
             $('#current-weather-icon').attr("src", weatherIcon);
             $('#temperature').text(`Temp: ${data.main.temp}°F`);
@@ -34,7 +34,7 @@ function weatherRequest(city_name) {
             console.log(error);
         });
     //start of the 5 day forecast fetch call
-    let forecastQueryURL = `http://api.openweathermap.org/data/2.5/forecast?q=${city_name}&appid=${APIkey}&units=imperial`;
+    let forecastQueryURL = `https://api.openweathermap.org/data/2.5/forecast?q=${city_name}&appid=${APIkey}&units=imperial`;
     fetch(forecastQueryURL)      // this call returns a PROMISE 
         .then(function (response) {
             return response.json();   // this converts the incoming data from JSON to a JAvaScript Object
@@ -56,7 +56,7 @@ function weatherRequest(city_name) {
                     //Day 1 forecast
             $(`#current-day-${i}`).text(`${noonTimeData[i].dt_txt.slice(0, 10)}`);
             console.log(`${data.list[2].main.temp}`);
-            let weatherIcon = `http://openweathermap.org/img/wn/${noonTimeData[i].weather[0].icon}@2x.png`;
+            let weatherIcon = `https://openweathermap.org/img/wn/${noonTimeData[i].weather[0].icon}@2x.png`;
             //need to double check on how to do the image
             $(`#current-icon-${i}`).attr("src", weatherIcon);
             $(`#current-temperature-${i}`).text(`Temp:${noonTimeData[i].main.temp}°F`);
@@ -64,21 +64,6 @@ function weatherRequest(city_name) {
             $(`#current-humidity-${i}`).text(`Humidity:${noonTimeData[i].main.humidity}%`);
             }
 
-
-
-
-
-
-
-        /*
-
-            //Day 2 forecast
-            $('#current-day-2').text(`${data.list[10].dt_text}`);
-            $('#current-icon-2').text(`${data.list[10].weather[0].icon}`);
-            $('#current-temperature-2').text(`${data.list[10].main.temp}`);
-            $('#current-wind-2').text(`${data.list[10].wind.speed}`);
-            $('#current-humidity-2').text(`${data.list[10].main.humidity}`);
-*/
         })
         .catch(function (error) {
             console.log(error);
@@ -101,9 +86,21 @@ function handleCitySearch(event) {
         return;
     }
     weatherRequest(cityForm);
+
+    var citiesArray = JSON.parse(localStorage.getItem('citiesSearched'));
+    console.log(citiesArray)||[];
+    if (!Array.isArray(citiesArray)){
+        citiesArray = []
+    }
+    citiesArray.push(cityForm)
+    localStorage.setItem('citiesSearched', JSON.stringify(citiesArray));
+
+    
+
+
     //Adds to searched cities list
 
-    searchedCitiesEl.append('<li>' + cityForm + '</li>');
+    searchedCitiesEl.append('<li><button>' + cityForm + '</buuton></li>');
 
     //clears form input element
     $('input[name="city-input"]').val('');
@@ -111,3 +108,15 @@ function handleCitySearch(event) {
 
 //Create an eventl listenr on ther button to start search
 citySearchEl.on('submit', handleCitySearch);
+
+function createButton () {
+    var citiesArray = JSON.parse(localStorage.getItem('citiesSearched'));
+    console.log(citiesArray)
+    for (var i =0; i = citiesArray.length; i++){
+        searchedCitiesEl.append('<li>' + citiesArray[i] + '</li>');
+    }
+        
+    }
+
+    createButton ();
+    
