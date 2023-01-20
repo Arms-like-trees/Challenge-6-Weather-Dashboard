@@ -17,25 +17,25 @@ function weatherRequest(city_name) {
 
     // Makes an Asynchronous Request 
     fetch(currentQueryURL)      // this call returns a PROMISE 
-        .then(function (response) {
-            if(response.status !== 200){
-                window.alert('please enter valid city')
-            } else
-            return response.json();   // this converts the incoming data from JSON to a JAvaScript Object
-        })
-        .then(function (data) {
-            console.log("********");
-            console.log(data);
-            let weatherIcon = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
-            $('#current-weather').text(`${data.name} (${now})`);
-            $('#current-weather-icon').attr("src", weatherIcon);
-            $('#temperature').text(`Temp: ${data.main.temp}°F`);
-            $('#wind').text(`Wind: ${data.wind.speed} MPH`);
-            $('#humidity').text(`Humidity: ${data.main.humidity} %`);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+    .then(function (response) {
+        if(response.status !== 200){
+            window.alert('please enter valid city')
+        } else
+        return response.json();   // this converts the incoming data from JSON to a JAvaScript Object
+    })
+    .then(function (data) {
+        console.log("********");
+        console.log(data);
+        let weatherIcon = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
+        $('#current-weather').text(`${data.name} (${now})`);
+        $('#current-weather-icon').attr("src", weatherIcon);
+        $('#temperature').text(`Temp: ${data.main.temp}°F`);
+        $('#wind').text(`Wind: ${data.wind.speed} MPH`);
+        $('#humidity').text(`Humidity: ${data.main.humidity} %`);
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
     //start of the 5 day forecast fetch call
     let forecastQueryURL = `https://api.openweathermap.org/data/2.5/forecast?q=${city_name}&appid=${APIkey}&units=imperial`;
     fetch(forecastQueryURL)      // this call returns a PROMISE 
@@ -126,10 +126,11 @@ function createButton () {
     createButton ();
 
 
-    searchedCitiesEl.on('click', buttonHandleCitySearch);
+    cityButtonsLoadedLi.on('click', buttonHandleCitySearch);
+var cityButtonsLoadedLi = $('#searched-cities-list > button')
 
     //To handle the city search with button
-    function buttonHandleCitySearch(event) {
+    function buttonHandleCitySearch() {
     // event.target();
     // event.preventDefault();
 console.log('it was clicked')
