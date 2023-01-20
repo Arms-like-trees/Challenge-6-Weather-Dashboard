@@ -18,6 +18,9 @@ function weatherRequest(city_name) {
     // Makes an Asynchronous Request 
     fetch(currentQueryURL)      // this call returns a PROMISE 
         .then(function (response) {
+            if(response.status !== 200){
+                window.alert('please enter valid city')
+            } else
             return response.json();   // this converts the incoming data from JSON to a JAvaScript Object
         })
         .then(function (data) {
@@ -55,7 +58,6 @@ function weatherRequest(city_name) {
             for (let i=0; i < noonTimeData.length; i++){
                     //Day 1 forecast
             $(`#current-day-${i}`).text(`${noonTimeData[i].dt_txt.slice(0, 10)}`);
-            console.log(`${data.list[2].main.temp}`);
             let weatherIcon = `https://openweathermap.org/img/wn/${noonTimeData[i].weather[0].icon}@2x.png`;
             //need to double check on how to do the image
             $(`#current-icon-${i}`).attr("src", weatherIcon);
@@ -84,23 +86,26 @@ function handleCitySearch(event) {
     if (!cityForm) {
         console.log('No city inputted');
         return;
-    }
+    } 
     weatherRequest(cityForm);
 
     var citiesArray = JSON.parse(localStorage.getItem('citiesSearched'));
     console.log(citiesArray)||[];
     if (!Array.isArray(citiesArray)){
         citiesArray = []
-    }
-    citiesArray.push(cityForm)
+    } if(!cityForm == citiesArray.includes(cityForm)){
+        citiesArray.push(cityForm)
     localStorage.setItem('citiesSearched', JSON.stringify(citiesArray));
+    searchedCitiesEl.append('<li><button>' + cityForm + '</buuton></li>');
+    }
+    
 
     
 
 
     //Adds to searched cities list
 
-    searchedCitiesEl.append('<li><button>' + cityForm + '</buuton></li>');
+    
 
     //clears form input element
     $('input[name="city-input"]').val('');
@@ -110,13 +115,28 @@ function handleCitySearch(event) {
 citySearchEl.on('submit', handleCitySearch);
 
 function createButton () {
-    var citiesArray = JSON.parse(localStorage.getItem('citiesSearched'));
+    var citiesArray = JSON.parse(localStorage.getItem('citiesSearched'))||[];
     console.log(citiesArray)
-    for (var i =0; i = citiesArray.length; i++){
-        searchedCitiesEl.append('<li>' + citiesArray[i] + '</li>');
+    for (var i =0; i < citiesArray.length; i++){
+        searchedCitiesEl.append('<li><button>' + citiesArray[i] + '</button></li>');
     }
         
     }
 
     createButton ();
-    
+
+
+    searchedCitiesEl.on('click', buttonHandleCitySearch);
+
+    //To handle the city search with button
+    function buttonHandleCitySearch(event) {
+    // event.target();
+    // event.preventDefault();
+console.log('it was clicked')
+    //select the city search id to send to local storage and use the API
+    // var buttonCityName = searchedCitiesEl.txt();
+
+    // weatherRequest(cityForm);
+
+}
+
