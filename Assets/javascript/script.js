@@ -1,5 +1,5 @@
 //grab current date
-var now = dayjs().format('MM/DD/YYYY')
+var now = dayjs().format('YYYY-MM-DD')
 
 // make a API request (for data - weather)
 
@@ -44,22 +44,41 @@ function weatherRequest(city_name) {
             console.log(data);
             $('#forecast').text('5-Day Forecast:');
 
-            //Day 1 forecast
-            $('#current-day+1').text(`${data.list[2].dt_text}`);
-            console.log(`${data.list[2].dt_text}`);
+
+            // for loop function
+
+            let noonTimeData = data.list.filter((day) => {
+                return day.dt_txt.includes("12:00:00")
+            });
+            console.log(noonTimeData);
+           
+            for (let i=0; i < noonTimeData.length; i++){
+                    //Day 1 forecast
+            $(`#current-day-${i}`).text(`${noonTimeData[i].dt_txt.slice(0, 10)}`);
+            console.log(`${data.list[2].main.temp}`);
+            let weatherIcon = `http://openweathermap.org/img/wn/${noonTimeData[i].weather[0].icon}@2x.png`;
             //need to double check on how to do the image
-            $('#current-icon+1').attr(`${data.list[2].weather[0].icon}`);
-            $('#current-temperature+1').text(`${data.list[2].main.temp}`);
-            $('#current-wind+1').text(`${data.list[2].wind.speed}`);
-            $('#current-humidity+1').text(`${data.list[2].main.humidity}`);
+            $(`#current-icon-${i}`).attr("src", weatherIcon);
+            $(`#current-temperature-${i}`).text(`Temp:${noonTimeData[i].main.temp}°F`);
+            $(`#current-wind-${i}`).text(`Wind:${noonTimeData[i].wind.speed}MPH`);
+            $(`#current-humidity-${i}`).text(`Humidity:${noonTimeData[i].main.humidity}%`);
+            }
+
+
+
+
+
+
+
+        /*
 
             //Day 2 forecast
-            $('#current-day+2').text(`${data.list[10].dt_text}`);
-            $('#current-icon+2').text(`${data.list[10].weather[0].icon}`);
-            $('#current-temperature+2').text(`${data.list[10].main.temp}`);
-            $('#current-wind+2').text(`${data.list[10].wind.speed}`);
-            $('#current-humidity+2').text(`${data.list[10].main.humidity}`);
-
+            $('#current-day-2').text(`${data.list[10].dt_text}`);
+            $('#current-icon-2').text(`${data.list[10].weather[0].icon}`);
+            $('#current-temperature-2').text(`${data.list[10].main.temp}`);
+            $('#current-wind-2').text(`${data.list[10].wind.speed}`);
+            $('#current-humidity-2').text(`${data.list[10].main.humidity}`);
+*/
         })
         .catch(function (error) {
             console.log(error);
