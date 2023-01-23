@@ -14,3 +14,8 @@ header {
 .day {
     margin: 20px;
 }
+
+#searched-cities-list > button {
+    display: flex;
+    flex-direction: column;
+}
