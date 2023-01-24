@@ -14,7 +14,7 @@ function weatherRequest(city_name) {
 
     // first we grab user input then make GEOCode request
 
-    let GeoCode = `http://api.openweathermap.org/geo/1.0/direct?q=${city_name}&limit=1&appid=${APIkey}`;
+    let GeoCode = `https://api.openweathermap.org/geo/1.0/direct?q=${city_name}&limit=1&appid=${APIkey}`;
 
     fetch(GeoCode)
         .then(function (response) {
