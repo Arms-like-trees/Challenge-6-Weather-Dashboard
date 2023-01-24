@@ -7,15 +7,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     <link rel="stylesheet" href="./Assets/css/style.css" />
-    <title>Weather Dashboard</title>
+    <title >Weather Dashboard</title>
 </head>
 
 <body>
-    <div class="columns">
-           <h1 class="column subtitles  ">Weather Dashboard</h1>
+   
+    <header class="is-$info">
+      <div class="columns">
+           <h1 class="column is-offset-4 subtitles  ">Weather Dashboard</h1>
     </div>
-    <header>
-     
     </header>
 
     <div class="columns">
@@ -24,8 +24,9 @@
                 <h2>Search for a City:</h2>
                 <form id="city-search">
                     <input type="text" id="city-input" name="city-input" placeholder="Enter city name" />
-                    <button class="btn btn-info">Search</button>
+                      <button class="btn btn-info">Search</button>
                 </form>
+              
             </div>
             <div class="searched-cities">
                 <ul id="searched-cities-list">
@@ -47,7 +48,7 @@
                 <h2 id="forecast"></h2>
                 
             </div>
-            <div class="column">
+            <div id="forecast" class="column">
                 <div class="columns">
                     <div class="day">
                         <p id="current-day-0"></p>
